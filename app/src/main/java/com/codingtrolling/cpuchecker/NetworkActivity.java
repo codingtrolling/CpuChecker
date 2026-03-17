@@ -1,6 +1,7 @@
 package com.codingtrolling.cpuchecker;
 
 import android.content.Context;
+import android.widget.ImageView;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;

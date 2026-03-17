@@ -1,6 +1,7 @@
 package com.codingtrolling.cpuchecker;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.widget.TextView;

@@ -1,6 +1,7 @@
 package com.codingtrolling.cpuchecker;
 
 import android.content.Intent;
+import android.widget.ImageView;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Bundle;
