@@ -40,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
                     logoRes = R.drawable.logo_google;
                 } else if (manufacturer.contains("motorola") || manufacturer.contains("lenovo")) {
                     logoRes = R.drawable.logo_motorola;
-                } else if (manufacturer.contains("vivo") || manufacturer.contains("iqoo")) {
-                    logoRes = R.drawable.logo_vivo;
                 } else if (manufacturer.contains("infinix") || manufacturer.contains("tecno") || manufacturer.contains("itel")) {
                     logoRes = R.drawable.logo_transsion; // Transsion Holdings
                 } else if (manufacturer.contains("huawei") || manufacturer.contains("honor")) {
