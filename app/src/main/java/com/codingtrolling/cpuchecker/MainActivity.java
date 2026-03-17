@@ -23,23 +23,35 @@ public class MainActivity extends AppCompatActivity {
 
     private void runDiagnostic() {
         new Thread(() -> {
-            String info = HardwareScanner.getCpuInfo().toLowerCase();
-            int iconRes = 0; 
+            String rawInfo = HardwareScanner.getCpuInfo();
+            String lowerInfo = rawInfo.toLowerCase();
+            
+            // Extract only the "Hardware" or "Model" line
+            String displayName = "Unknown Processor";
+            for (String line : rawInfo.split("\n")) {
+                if (line.contains("Hardware") || line.contains("model name")) {
+                    displayName = line.split(":")[1].trim();
+                    break;
+                }
+            }
 
-            if (info.contains("qualcomm") || info.contains("snapdragon")) {
+            int iconRes = 0;
+            // Better detection logic
+            if (lowerInfo.contains("mt") || lowerInfo.contains("mediatek") || lowerInfo.contains("helio") || lowerInfo.contains("dimensity")) {
+                iconRes = R.drawable.mediatek;
+            } else if (lowerInfo.contains("qcom") || lowerInfo.contains("snapdragon")) {
                 iconRes = R.drawable.snapdragon;
-            } else if (info.contains("mediatek") || info.contains("mt6")) {
-                iconRes = R.drawable.snapdragon;
-            } else if (info.contains("exynos") || info.contains("samsung")) {
-                iconRes = R.drawable.snapdragon;
+            } else if (lowerInfo.contains("exynos") || lowerInfo.contains("samsung")) {
+                iconRes = R.drawable.exynos;
             }
 
             final int finalIcon = iconRes;
+            final String finalDisplay = displayName;
+            
             handler.post(() -> {
-                if (finalIcon != 0) {
-                    brandIcon.setImageResource(finalIcon);
-                }
-                output.setText(">> SCAN COMPLETE\n" + HardwareScanner.getCpuInfo());
+                if (finalIcon != 0) brandIcon.setImageResource(finalIcon);
+                output.setTextSize(24);
+                output.setText("CHIP DETECTED:\n" + finalDisplay);
             });
         }).start();
     }
