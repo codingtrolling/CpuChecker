@@ -1,86 +1,77 @@
 package com.codingtrolling.cpuchecker;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.TextView;
+import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.RandomAccessFile;
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     private TextView output;
+    private ImageView brandIcon;
     private Handler handler = new Handler(Looper.getMainLooper());
-    private boolean isRunning = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         output = findViewById(R.id.cpu_terminal_output);
-        startLiveUpdate();
+        brandIcon = findViewById(R.id.cpu_brand_icon);
+        startDiagnostics();
     }
 
-    private void startLiveUpdate() {
+    private void startDiagnostics() {
         new Thread(() -> {
-            while (isRunning) {
-                StringBuilder sb = new StringBuilder();
-                
-                // --- DYNAMIC SOC DETECTION ---
-                // Reading from the actual System Build props
-                String model = Build.HARDWARE; 
-                String board = Build.BOARD;
-                int cores = Runtime.getRuntime().availableProcessors();
-                
-                sb.append(String.format("%-18s %s\n", "Hardware", model.toUpperCase()));
-                sb.append(String.format("%-18s %s\n", "Board", board));
-                sb.append(String.format("%-18s %s\n", "Cores", cores));
-                sb.append("------------------------------------\n");
+            while (true) {
+                String manufacturer = Build.MANUFACTURER.toLowerCase();
+                int logoRes = R.drawable.logo_generic;
 
-                // --- LIVE CORE FREQUENCIES ---
-                for (int i = 0; i < cores; i++) {
-                    sb.append(String.format("%-18s %s MHz\n", "CPU " + i, getCoreFreq(i)));
+                // --- GLOBAL BRAND MAPPING ---
+                if (manufacturer.contains("xiaomi") || manufacturer.contains("poco") || manufacturer.contains("redmi")) {
+                    logoRes = R.drawable.logo_xiaomi;
+                } else if (manufacturer.contains("samsung")) {
+                    logoRes = R.drawable.logo_samsung;
+                } else if (manufacturer.contains("oppo") || manufacturer.contains("realme") || manufacturer.contains("oneplus")) {
+                    logoRes = R.drawable.logo_oppo; // BBK Electronics group
+                } else if (manufacturer.contains("google")) {
+                    logoRes = R.drawable.logo_google;
+                } else if (manufacturer.contains("motorola") || manufacturer.contains("lenovo")) {
+                    logoRes = R.drawable.logo_motorola;
+                } else if (manufacturer.contains("vivo") || manufacturer.contains("iqoo")) {
+                    logoRes = R.drawable.logo_vivo;
+                } else if (manufacturer.contains("infinix") || manufacturer.contains("tecno") || manufacturer.contains("itel")) {
+                    logoRes = R.drawable.logo_transsion; // Transsion Holdings
+                } else if (manufacturer.contains("huawei") || manufacturer.contains("honor")) {
+                    logoRes = R.drawable.logo_huawei;
                 }
 
-                sb.append("------------------------------------\n");
+                final int finalLogo = logoRes;
+                final String stats = "MANUFACTURER: " + Build.MANUFACTURER.toUpperCase() + "\n" +
+                                     "HARDWARE:     " + Build.HARDWARE.toUpperCase() + "\n" +
+                                     "MODEL:        " + Build.MODEL + "\n" +
+                                     "CORES:        " + Runtime.getRuntime().availableProcessors() + "\n" +
+                                     "----------------------------\n" +
+                                     "CORE 0:       " + getFreq(0) + " MHz\n" +
+                                     "CORE 1:       " + getFreq(1) + " MHz";
 
-                // --- BATTERY & OS ---
-                Intent b = registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-                int level = b.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-                int temp = b.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
-                
-                sb.append(String.format("%-18s %d%%\n", "Battery", level));
-                sb.append(String.format("%-18s %.1f°C\n", "Temp", (temp / 10.0)));
-                sb.append(String.format("%-18s Android %s\n", "OS Version", Build.VERSION.RELEASE));
-                
-                // Detecting if the device is rooted (Common for CodingTrolling users)
-                boolean isRooted = new File("/system/app/Superuser.apk").exists() || new File("/system/xbin/su").exists();
-                sb.append(String.format("%-18s %s\n", "Root Access", isRooted ? "YES" : "NO"));
+                handler.post(() -> {
+                    brandIcon.setImageResource(finalLogo);
+                    output.setText(stats);
+                });
 
-                final String result = sb.toString();
-                handler.post(() -> output.setText(result));
                 try { Thread.sleep(1000); } catch (Exception e) {}
             }
         }).start();
     }
 
-    private String getCoreFreq(int coreIndex) {
+    private String getFreq(int core) {
         try {
-            RandomAccessFile reader = new RandomAccessFile("/sys/devices/system/cpu/cpu" + coreIndex + "/cpufreq/scaling_cur_freq", "r");
-            String line = reader.readLine();
-            reader.close();
+            RandomAccessFile r = new RandomAccessFile("/sys/devices/system/cpu/cpu" + core + "/cpufreq/scaling_cur_freq", "r");
+            String line = r.readLine(); r.close();
             return String.valueOf(Integer.parseInt(line.trim()) / 1000);
         } catch (Exception e) { return "0"; }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        isRunning = false;
     }
 }
