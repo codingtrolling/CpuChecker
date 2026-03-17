@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="> CPU_CHECKER_INIT..."
+        android:textColor="#00FF00"
+        android:textSize="18sp"
+        android:fontFamily="monospace" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/header"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/cpu_terminal_output"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/init_scan"
+            android:textColor="#00FF00"
+            android:fontFamily="monospace"
+            android:textSize="14sp" />
+    </ScrollView>
+</RelativeLayout>
