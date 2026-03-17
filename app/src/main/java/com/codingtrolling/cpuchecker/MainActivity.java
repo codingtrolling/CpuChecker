@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.RandomAccessFile;
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     private TextView output;
@@ -28,31 +30,37 @@ public class MainActivity extends AppCompatActivity {
         new Thread(() -> {
             while (isRunning) {
                 StringBuilder sb = new StringBuilder();
+                
+                // --- DYNAMIC SOC DETECTION ---
+                // Reading from the actual System Build props
+                String model = Build.HARDWARE; 
+                String board = Build.BOARD;
                 int cores = Runtime.getRuntime().availableProcessors();
                 
-                // --- SoC Section ---
-                sb.append(String.format("%-18s %s\n", "Model", "MT6769H"));
+                sb.append(String.format("%-18s %s\n", "Hardware", model.toUpperCase()));
+                sb.append(String.format("%-18s %s\n", "Board", board));
                 sb.append(String.format("%-18s %s\n", "Cores", cores));
-                sb.append(String.format("%-18s %s\n", "Process", "12 nm"));
                 sb.append("------------------------------------\n");
 
-                // --- CPU Core Speeds ---
+                // --- LIVE CORE FREQUENCIES ---
                 for (int i = 0; i < cores; i++) {
                     sb.append(String.format("%-18s %s MHz\n", "CPU " + i, getCoreFreq(i)));
                 }
 
                 sb.append("------------------------------------\n");
 
-                // --- Battery Section ---
-                Intent batteryIntent = registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-                int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-                int temp = batteryIntent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
-                int voltage = batteryIntent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
+                // --- BATTERY & OS ---
+                Intent b = registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+                int level = b.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+                int temp = b.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
                 
-                sb.append(String.format("%-18s %d%%\n", "Battery Level", level));
-                sb.append(String.format("%-18s %.1f°C\n", "Temperature", (temp / 10.0)));
-                sb.append(String.format("%-18s %d mV\n", "Voltage", voltage));
-                sb.append(String.format("%-18s %s\n", "GPU Renderer", "Mali-G52 MC2"));
+                sb.append(String.format("%-18s %d%%\n", "Battery", level));
+                sb.append(String.format("%-18s %.1f°C\n", "Temp", (temp / 10.0)));
+                sb.append(String.format("%-18s Android %s\n", "OS Version", Build.VERSION.RELEASE));
+                
+                // Detecting if the device is rooted (Common for CodingTrolling users)
+                boolean isRooted = new File("/system/app/Superuser.apk").exists() || new File("/system/xbin/su").exists();
+                sb.append(String.format("%-18s %s\n", "Root Access", isRooted ? "YES" : "NO"));
 
                 final String result = sb.toString();
                 handler.post(() -> output.setText(result));
