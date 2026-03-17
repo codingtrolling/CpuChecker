@@ -4,14 +4,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.TextView;
-import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.RandomAccessFile;
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private TextView output;
-    private ImageView brandIcon;
     private Handler handler = new Handler(Looper.getMainLooper());
     private boolean isRunning = true;
 
@@ -20,53 +17,40 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         output = findViewById(R.id.cpu_terminal_output);
-        brandIcon = findViewById(R.id.cpu_brand_icon);
-        startMonitoring();
+        startLiveUpdate();
     }
 
-    private void startMonitoring() {
+    private void startLiveUpdate() {
         new Thread(() -> {
             while (isRunning) {
-                String rawInfo = HardwareScanner.getCpuInfo();
-                float usage = getCpuUsage();
+                StringBuilder sb = new StringBuilder();
                 int cores = Runtime.getRuntime().availableProcessors();
                 
-                String model = "MediaTek Helio/Dimensity"; // Default for your chip
-                for (String line : rawInfo.split("\n")) {
-                    if (line.contains("Hardware") || line.contains("model name")) {
-                        model = line.split(":")[1].trim();
-                        break;
-                    }
+                sb.append(String.format("%-15s %s\n", "Model", "MT6769H"));
+                sb.append(String.format("%-15s %s\n", "Cores", cores));
+                sb.append(String.format("%-15s %s\n", "Process", "12 nm"));
+                sb.append("-------------------------------\n");
+
+                for (int i = 0; i < cores; i++) {
+                    String freq = getCoreFreq(i);
+                    sb.append(String.format("%-15s %s MHz\n", "CPU " + i, freq));
                 }
 
-                final String display = "SYSTEM ONLINE\n\n" +
-                                     "CHIP: " + model + "\n" +
-                                     "CORES: " + cores + " THREADS\n" +
-                                     "LOAD: " + String.format("%.1f", usage) + "%";
-
-                handler.post(() -> output.setText(display));
-                
+                final String result = sb.toString();
+                handler.post(() -> output.setText(result));
                 try { Thread.sleep(1000); } catch (Exception e) {}
             }
         }).start();
     }
 
-    private float getCpuUsage() {
+    private String getCoreFreq(int coreIndex) {
         try {
-            RandomAccessFile reader = new RandomAccessFile("/proc/stat", "r");
-            String load = reader.readLine();
-            String[] toks = load.split(" +");
-            long idle1 = Long.parseLong(toks[4]);
-            long cpu1 = Long.parseLong(toks[1]) + Long.parseLong(toks[2]) + Long.parseLong(toks[3]) + Long.parseLong(toks[4]) + Long.parseLong(toks[5]) + Long.parseLong(toks[6]) + Long.parseLong(toks[7]);
-            try { Thread.sleep(360); } catch (Exception e) {}
-            reader.seek(0);
-            load = reader.readLine();
+            RandomAccessFile reader = new RandomAccessFile("/sys/devices/system/cpu/cpu" + coreIndex + "/cpufreq/scaling_cur_freq", "r");
+            String line = reader.readLine();
             reader.close();
-            toks = load.split(" +");
-            long idle2 = Long.parseLong(toks[4]);
-            long cpu2 = Long.parseLong(toks[1]) + Long.parseLong(toks[2]) + Long.parseLong(toks[3]) + Long.parseLong(toks[4]) + Long.parseLong(toks[5]) + Long.parseLong(toks[6]) + Long.parseLong(toks[7]);
-            return (float)(cpu2 - cpu1 - (idle2 - idle1)) * 100 / (cpu2 - cpu1);
-        } catch (IOException ex) { return 0; }
+            int khz = Integer.parseInt(line.trim());
+            return String.valueOf(khz / 1000); // Convert KHz to MHz
+        } catch (Exception e) { return "0"; }
     }
 
     @Override

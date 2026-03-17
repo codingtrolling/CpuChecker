@@ -1,30 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#05080A"
-    android:gravity="center"
-    android:padding="30dp">
+    android:background="#05080A">
 
-    <ImageView
-        android:id="@+id/cpu_brand_icon"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginBottom="40dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/mediatek" />
-
-    <TextView
-        android:id="@+id/cpu_terminal_output"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#33E1FF"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:fontFamily="monospace"
-        android:lineSpacingExtra="8dp"
-        android:gravity="center"
-        android:text="SCANNING..."/>
+        android:orientation="vertical"
+        android:padding="16dp">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="20dp">
+
+            <ImageView
+                android:id="@+id/cpu_brand_icon"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/mediatek"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:id="@+id/cpu_model_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MediaTek Helio G88"
+                android:textColor="#33E1FF"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp"/>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1A3A4A"/>
+
+        <TextView
+            android:id="@+id/cpu_terminal_output"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#33E1FF"
+            android:textSize="16sp"
+            android:fontFamily="monospace"
+            android:paddingTop="10dp"
+            android:lineSpacingExtra="12dp"
+            android:text="Loading SoC Data..."/>
+
+    </LinearLayout>
+</ScrollView>
