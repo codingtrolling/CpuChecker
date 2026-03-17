@@ -1,0 +1,39 @@
+name: Android CI - Compile & Release
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ 'v*' ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Repair Gradle Wrapper
+      run: |
+        mkdir -p gradle/wrapper
+        # Download the tiny 60KB JAR directly from the source
+        curl -L -o gradle/wrapper/gradle-wrapper.jar "https://github.com/gradle/gradle/raw/v8.5.0/gradle/wrapper/gradle-wrapper.jar"
+        chmod +x gradlew
+
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug
+
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: app/build/outputs/apk/debug/app-debug.apk
+        body: "🦅 Release v2.0: Icons Integrated & Wrapper Repaired. Trolled by CodingTrolling."

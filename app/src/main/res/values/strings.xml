@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CpuChecker</string>
+    <string name="init_scan">Initializing CPU Scan...</string>
+</resources>
