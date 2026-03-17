@@ -9,65 +9,27 @@
 
     <ImageView
         android:id="@+id/menu_brand_logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginBottom="20dp"
         android:src="@drawable/logo_generic"
         android:scaleType="centerInside"/>
 
     <TextView
+        android:id="@+id/suite_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CODINGTROLLING SUITE"
+        android:text="Cpu Checker"
         android:textColor="#33E1FF"
-        android:textSize="22sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginBottom="30dp"
         android:fontFamily="monospace"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="CPU CORE DATA"
-        android:backgroundTint="#1A3A4A"
-        android:textColor="#33E1FF"
-        android:layout_marginBottom="8dp"
-        android:onClick="launchCpu"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="NETWORK ANALYZER"
-        android:backgroundTint="#1A3A4A"
-        android:textColor="#33E1FF"
-        android:layout_marginBottom="8dp"
-        android:onClick="launchNetwork"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="POWER &amp; BATTERY"
-        android:backgroundTint="#1A3A4A"
-        android:textColor="#33E1FF"
-        android:layout_marginBottom="8dp"
-        android:onClick="launchBattery"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="SYSTEM ARCHIVE"
-        android:backgroundTint="#1A3A4A"
-        android:textColor="#33E1FF"
-        android:layout_marginBottom="8dp"
-        android:onClick="launchSystem"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="DISPLAY &amp; GPU"
-        android:backgroundTint="#1A3A4A"
-        android:textColor="#33E1FF"
-        android:layout_marginBottom="8dp"
-        android:onClick="launchDisplay"/>
+    <Button android:layout_width="match_parent" android:layout_height="50dp" android:text="CPU CORE DATA" android:backgroundTint="#1A3A4A" android:textColor="#33E1FF" android:layout_marginBottom="8dp" android:onClick="launchCpu"/>
+    <Button android:layout_width="match_parent" android:layout_height="50dp" android:text="NETWORK ANALYZER" android:backgroundTint="#1A3A4A" android:textColor="#33E1FF" android:layout_marginBottom="8dp" android:onClick="launchNetwork"/>
+    <Button android:layout_width="match_parent" android:layout_height="50dp" android:text="POWER &amp; BATTERY" android:backgroundTint="#1A3A4A" android:textColor="#33E1FF" android:layout_marginBottom="8dp" android:onClick="launchBattery"/>
+    <Button android:layout_width="match_parent" android:layout_height="50dp" android:text="SYSTEM ARCHIVE" android:backgroundTint="#1A3A4A" android:textColor="#33E1FF" android:layout_marginBottom="8dp" android:onClick="launchSystem"/>
+    <Button android:layout_width="match_parent" android:layout_height="50dp" android:text="DISPLAY &amp; GPU" android:backgroundTint="#1A3A4A" android:textColor="#33E1FF" android:layout_marginBottom="8dp" android:onClick="launchDisplay"/>
 
 </LinearLayout>
