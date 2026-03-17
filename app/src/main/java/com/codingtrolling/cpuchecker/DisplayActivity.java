@@ -11,6 +11,7 @@ public class DisplayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        BrandUtils.applyLogo((ImageView) findViewById(R.id.activity_logo));
         TextView output = findViewById(R.id.cpu_terminal_output);
 
         DisplayMetrics dm = new DisplayMetrics();

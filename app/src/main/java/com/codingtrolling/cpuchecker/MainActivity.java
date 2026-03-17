@@ -25,22 +25,21 @@ public class MainActivity extends AppCompatActivity {
     private void setBrandLogo(ImageView view) {
         String man = Build.MANUFACTURER.toLowerCase();
         String hw = Build.HARDWARE.toLowerCase();
+        String board = Build.BOARD.toLowerCase();
 
-        // Check Hardware first (Using R.drawable!)
-        if (hw.contains("mt") || hw.contains("mediatek")) {
-            view.setImageResource(R.drawable.mediatek);
-        } else if (hw.contains("qcom") || hw.contains("snapdragon")) {
+        // STRICT CHIPSET CHECK (Prioritize Snapdragon/Qualcomm)
+        if (hw.contains("qcom") || hw.contains("snapdragon") || board.contains("qcom") || board.contains("msm")) {
             view.setImageResource(R.drawable.snapdragon);
-        } else if (hw.contains("exynos")) {
+        } else if (hw.contains("mt") || hw.contains("mediatek") || board.contains("mt")) {
+            view.setImageResource(R.drawable.mediatek);
+        } else if (hw.contains("exynos") || board.contains("exynos")) {
             view.setImageResource(R.drawable.exynos);
         } 
-        // Fallback to Manufacturer
+        // MANUFACTURER FALLBACK
         else if (man.contains("xiaomi") || man.contains("redmi") || man.contains("poco")) {
             view.setImageResource(R.drawable.logo_xiaomi);
         } else if (man.contains("samsung")) {
             view.setImageResource(R.drawable.logo_samsung);
-        } else if (man.contains("oppo") || man.contains("realme")) {
-            view.setImageResource(R.drawable.logo_oppo);
         } else if (man.contains("google")) {
             view.setImageResource(R.drawable.logo_google);
         } else {

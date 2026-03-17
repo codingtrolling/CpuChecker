@@ -16,6 +16,7 @@ public class CpuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // We can reuse the layout for now
+        BrandUtils.applyLogo((ImageView) findViewById(R.id.activity_logo));
         output = findViewById(R.id.cpu_terminal_output);
         startCpuMonitor();
     }
