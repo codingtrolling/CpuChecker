@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         
-        // Update Title to Cpu Checker
         TextView title = findViewById(R.id.suite_title);
         if (title != null) title.setText("Cpu Checker");
 
@@ -27,11 +26,11 @@ public class MainActivity extends AppCompatActivity {
         String man = Build.MANUFACTURER.toLowerCase();
         String hw = Build.HARDWARE.toLowerCase();
 
-        // Check Hardware first
+        // Check Hardware first (Using R.drawable!)
         if (hw.contains("mt") || hw.contains("mediatek")) {
             view.setImageResource(R.drawable.mediatek);
         } else if (hw.contains("qcom") || hw.contains("snapdragon")) {
-            view.setImageResource(R.id.snapdragon);
+            view.setImageResource(R.drawable.snapdragon);
         } else if (hw.contains("exynos")) {
             view.setImageResource(R.drawable.exynos);
         } 
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (man.contains("oppo") || man.contains("realme")) {
             view.setImageResource(R.drawable.logo_oppo);
         } else if (man.contains("google")) {
-            view.setImageResource(R.id.logo_google);
+            view.setImageResource(R.drawable.logo_google);
         } else {
             view.setImageResource(R.drawable.logo_generic);
         }
