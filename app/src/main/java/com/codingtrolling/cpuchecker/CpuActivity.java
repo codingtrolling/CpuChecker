@@ -17,7 +17,7 @@ public class CpuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // We can reuse the layout for now
-        BrandUtils.applyLogo((ImageView) findViewById(R.id.activity_logo));
+        applyChipsetLogo((ImageView) findViewById(R.id.activity_logo));
         output = findViewById(R.id.cpu_terminal_output);
         startCpuMonitor();
     }
@@ -46,5 +46,12 @@ public class CpuActivity extends AppCompatActivity {
             String line = r.readLine(); r.close();
             return String.valueOf(Integer.parseInt(line.trim()) / 1000);
         } catch (Exception e) { return "0"; }
+    }
+    private void applyChipsetLogo(ImageView view) {
+        String hw = android.os.Build.HARDWARE.toLowerCase();
+        if (hw.contains("mt") || hw.contains("mediatek")) view.setImageResource(R.drawable.mediatek);
+        else if (hw.contains("qcom") || hw.contains("snapdragon")) view.setImageResource(R.drawable.snapdragon);
+        else if (hw.contains("exynos")) view.setImageResource(R.drawable.exynos);
+        else view.setImageResource(R.drawable.logo_generic);
     }
 }
