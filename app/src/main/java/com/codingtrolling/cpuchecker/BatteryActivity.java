@@ -19,7 +19,7 @@ public class BatteryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Reusing the terminal layout
-        BrandUtils.applyLogo((ImageView) findViewById(R.id.activity_logo));
+        ((ImageView)findViewById(R.id.activity_logo)).setImageResource(R.drawable.ic_battery);
         output = findViewById(R.id.cpu_terminal_output);
         startBatteryMonitor();
     }

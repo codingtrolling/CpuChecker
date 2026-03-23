@@ -3,39 +3,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#05080A"
-    android:padding="15dp">
+    android:background="#FFFFFF"
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="12dp">
 
         <ImageView
             android:id="@+id/activity_logo"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/logo_generic"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:scaleType="centerInside" />
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="24dp"
+            android:background="#DDDDDD"
+            android:layout_marginHorizontal="12dp" />
+
         <TextView
+            android:id="@+id/activity_title_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" | DIAGNOSTICS"
-            android:textColor="#33E1FF"
+            android:text="DIAGNOSTICS"
+            android:textColor="#333333"
             android:textSize="14sp"
-            android:fontFamily="monospace" />
+            android:textStyle="bold" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/cpu_terminal_output"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="#00FF41"
-        android:textSize="14sp"
+        android:textColor="#222222"
+        android:textSize="15sp"
         android:fontFamily="monospace"
-        android:text="Initializing..." />
+        android:lineSpacingExtra="4dp"
+        android:text="Loading Data..." />
 
 </LinearLayout>
